@@ -28,22 +28,30 @@ namespace DatabaseFirst
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllersWithViews();
+
             services.AddAuthentication("CookieAuth").AddCookie("CookieAuth", config =>
             {
                 config.Cookie.Name = "Cookie.Auth";
+                config.LoginPath = "/Authentification/Login";
 
             });
-            services.AddControllersWithViews();
+
+            //services.ConfigureApplicationCookie(config =>
+            //{
+            //    config.Cookie.Name = "Login.Cookie";
+
+            //});
             //services.AddDbContext<AutolibContext>(config =>
             //{
             //    config.UseMySql("Server=localhost\SQLEXPRESS01;Database=master;Trusted_Connection=True;");
             //});
             services.AddDbContext<AutolibContext>(config =>
             {
-                config.UseSqlServer(Configuration.GetConnectionString("ConnectionStrings"));
+                config.UseSqlServer("Server=localhost\\SQLEXPRESS01;Database=master;Trusted_Connection=True;");
             });
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                    .AddUserStore<AutolibContext>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<AutolibContext>()
                     .AddDefaultTokenProviders();
         }
 
@@ -64,6 +72,7 @@ namespace DatabaseFirst
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

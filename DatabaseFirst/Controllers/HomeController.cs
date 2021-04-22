@@ -1,4 +1,5 @@
 ﻿using DatabaseFirst.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,6 +20,12 @@ namespace DatabaseFirst.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Vehicules()
         {
             return View();
         }
