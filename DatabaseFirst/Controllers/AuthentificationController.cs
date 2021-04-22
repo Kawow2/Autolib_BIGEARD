@@ -22,49 +22,45 @@ namespace DatabaseFirst.Controllers
         public ActionResult Index()
         {
             return View();
+            //https://stackoverflow.com/questions/21762077/asp-net-identity-and-claims/21967027
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Login(string nom, string prenom)
-        //{
-        //    var db = new AutolibContext();
-
-        //    var user = db.Clients.FirstOrDefault(x => x.Nom == nom && x.Prenom == prenom);
-
-            
-        //    if (user != null)
-        //    {//connection
-        //        //var claims = new List<Claim>()
-        //        //{
-        //        //    new Claim(ClaimTypes.Name,user.Nom),
-        //        //    new Claim("Prenom",user.Prenom),
-        //        //    new Claim("Id",user.IdClient.ToString()),
-        //        //};
-
-        //        //var identity = new ClaimsIdentity(claims, "TestClaims");
-        //        //var userPrincipal = new ClaimsPrincipal(new[] { identity });
-
-        //        //await HttpContext.SignInAsync(userPrincipal);
-        //    }
-            
-        //    return RedirectToAction("Index", "Home");
-        //}
-        public ActionResult Login()
+        [HttpPost]
+        public  ActionResult Login(string nom, string prenom)
         {
-            var claims = new List<Claim>()
+            var db = new AutolibContext();
+            var user = db.Clients.FirstOrDefault(x => x.Nom == nom && x.Prenom == prenom);
+            if (user != null)
+            {//connection
+                var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name,"LAROSE"),
-                    new Claim("Prenom","SOLANGE"),
-                    new Claim("Id","1"),
+                    new Claim(ClaimTypes.Name,user.Nom),
+                    new Claim("Prenom",user.Prenom),
+                    new Claim("Id",user.IdClient.ToString()),
                 };
+                var identity = new ClaimsIdentity(claims, "TestClaims");
+                var userPrincipal = new ClaimsPrincipal(new[] { identity });
 
-            var identity = new ClaimsIdentity(claims, "TestClaims");
-            var userPrincipal = new ClaimsPrincipal(new[] { identity });
-
-            HttpContext.SignInAsync(userPrincipal);
+                HttpContext.SignInAsync(userPrincipal);
+            }
             return RedirectToAction("Index", "Home");
-
         }
+        //public ActionResult Login()
+        //{
+        //    //var claims = new List<Claim>()
+        //    //    {
+        //    //        new Claim(ClaimTypes.Name,"LAROSE"),
+        //    //        new Claim("Prenom","SOLANGE"),
+        //    //        new Claim("Id","1"),
+        //    //    };
+
+        //    //var identity = new ClaimsIdentity(claims, "TestClaims");
+        //    //var userPrincipal = new ClaimsPrincipal(new[] { identity });
+
+        //    //HttpContext.SignInAsync(userPrincipal);
+        //    return RedirectToAction("Index", "Home");
+
+        //}
         [HttpPost]
         public ActionResult Register(string nom, string prenom)
         {
