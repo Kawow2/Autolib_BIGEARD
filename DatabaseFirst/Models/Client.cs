@@ -6,12 +6,16 @@ using System.Collections.Generic;
 
 namespace DatabaseFirst.Models
 {
-    public partial class Client : IdentityUser
+    public partial class Client
     {
         public Client()
         {
             Reservations = new HashSet<Reservation>();
             Utilises = new HashSet<Utilise>();
+        }
+
+        public Client(string userName)
+        {
         }
 
         public int IdClient { get; set; }

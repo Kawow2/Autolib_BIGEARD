@@ -1,4 +1,6 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -6,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatabaseFirst.Models
 {
-    public partial class AutolibContext : DbContext
+    public partial class AutolibContext : IdentityDbContext<ApplicationUser>
     {
         public AutolibContext()
         {
@@ -265,8 +267,13 @@ namespace DatabaseFirst.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_Vehicule_Type_vehicule1");
             });
-
-            OnModelCreatingPartial(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Ignore<IdentityUserLogin<string>>();
+            modelBuilder.Ignore<IdentityUserRole<string>>();
+            modelBuilder.Ignore<IdentityUserClaim<string>>();
+            modelBuilder.Ignore<IdentityUserToken<string>>();
+            modelBuilder.Ignore<IdentityUser<string>>();
+            //modelBuilder.Ignore<ApplicationUser>();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
