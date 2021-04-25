@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFirst.Controllers
 {
-    public class AuthentificationController : Controller
+    public class AuthentificationController : BaseController
     {
         //private readonly UserManager<ApplicationUser> userManager;
 
@@ -34,14 +34,15 @@ namespace DatabaseFirst.Controllers
             {//connection
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Name,user.Nom),
-                    new Claim("Prenom",user.Prenom),
-                    new Claim("Id",user.IdClient.ToString()),
+                    //new Claim(ClaimTypes.Name,user.Nom),
+                    //new Claim("Prenom",user.Prenom),
+                    new Claim("IdClient",user.IdClient.ToString()),
                 };
-                var identity = new ClaimsIdentity(claims, "TestClaims");
+                var identity = new ClaimsIdentity(claims, "Identity");
                 var userPrincipal = new ClaimsPrincipal(new[] { identity });
 
                 HttpContext.SignInAsync(userPrincipal);
+                HttpContext.Session.SetObject("CurrentUser", user);
             }
             return RedirectToAction("Index", "Home");
         }

@@ -50,6 +50,9 @@ namespace DatabaseFirst
             {
                 config.UseSqlServer("Server=localhost\\SQLEXPRESS01;Database=master;Trusted_Connection=True;");
             });
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);
+            });
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             //    .AddEntityFrameworkStores<AutolibContext>()
             //        .AddDefaultTokenProviders();
@@ -70,7 +73,7 @@ namespace DatabaseFirst
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
             app.UseAuthentication();
 

@@ -6,17 +6,18 @@
 }
 @using (Html.BeginForm("Login", "Authentification", FormMethod.Post))
 {
-    <form action="Login" method="post">
-        <div>
-            <label for="name">Nom :</label>
-            <input type="text" id="nom" name="nom">
-        </div>
-        <div>
-            <label for="mail">Prénom</label>
-            <input type="text" id="prenom" name="prenom">
-        </div>
-        <div class="button">
-            <button type="submit">Connection</button>
-        </div>
-    </form>
+<form action="Login" method="post">
+    <div>
+        <label for="name">Nom :</label>
+        <input type="text" id="nom" name="nom">
+    </div>
+    <div>
+        <label for="text">Prénom</label>
+        <input type="text" id="prenom" name="prenom">
+    </div>
+    
+    <div class="button">
+        <button type="submit">Connection</button>
+    </div>
+</form>
 }
