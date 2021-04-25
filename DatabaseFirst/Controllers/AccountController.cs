@@ -34,5 +34,28 @@ namespace DatabaseFirst.Controllers
             //return View();
         }
 
+
+        public ActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult CreateAccount(string nom, string prenom, DateTime naiss)
+        {
+
+            var client = new Client()
+            {
+                DateNaissance = naiss,
+                Nom = nom,
+                Prenom = prenom
+            };
+            using (var db = new AutolibContext())
+            {
+                db.Clients.Add(client);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index","Home");
+        }
+
     }
 }

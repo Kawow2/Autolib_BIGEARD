@@ -61,18 +61,18 @@ namespace DatabaseFirst.Controllers
         //    //HttpContext.SignInAsync(userPrincipal);
         //    return RedirectToAction("Index", "Home");
 
+        ////}
+        //[HttpPost]
+        //public ActionResult Register(string nom, string prenom)
+        //{
+        //    return RedirectToAction("Index", "Home");
+
         //}
-        [HttpPost]
-        public ActionResult Register(string nom, string prenom)
-        {
-            return RedirectToAction("Index", "Home");
+        //public ActionResult Register()
+        //{
+        //    return RedirectToAction("Index", "Home");
 
-        }
-        public ActionResult Register()
-        {
-            return RedirectToAction("Index", "Home");
-
-        }
+        //}
 
         public ActionResult Logout()
         {
