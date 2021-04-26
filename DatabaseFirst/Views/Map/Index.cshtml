@@ -1,0 +1,234 @@
+﻿﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<head>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<div id='map' style='width: 1200px; height: 600px;'></div>
+<div class="map-overlay">
+    <fieldset>
+        <input id="feature-filter" type="text" placeholder="Filter results by name">
+    </fieldset>
+    <div id="feature-listing" class="listing"></div>
+</div>
+
+<script>
+    var datas;
+    var url = "/MapController/GenerateMap";
+    $.get(url, null, function (data) {
+        datas = data;
+    })
+    console.log(datas);
+    @*var datas =  '@Model.JsonValue';*@
+    mapboxgl.accessToken = 'pk.eyJ1IjoiYWI4OTk3OTkiLCJhIjoiY2tmZjBlMXFnMGE4ZzJzczIxZ3lhOXJkNSJ9.Ii7MCkFbUkXZn5vZjicIGg';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [2.238470, 48.812995],
+        zoom: 12,
+        minZoom: 0,
+        maxZoom: 15
+    });
+
+    var stations = [];
+
+    var popup = new mapboxgl.Popup({
+        closeButton: false
+    });
+
+    var filterEl = document.getElementById('feature-filter');
+    var listingEl = document.getElementById('feature-listing');
+
+    function renderListings(features) {
+        var empty = document.createElement('p');
+        // Clear any existing listings
+        listingEl.innerHTML = '';
+        if (features.length) {
+            features.forEach(function (feature) {
+                // console.log(feature);
+                var prop = feature.properties;
+                var item = document.createElement('a');
+                // item.href = prop.wikipedia;
+                // item.target = '_blank';
+                item.textContent = prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')';
+                item.addEventListener('mouseover', function () {
+                    var prop = feature.properties;
+                    // Highlight corresponding feature on the map
+                    // console.log(feature.geometry.coordinates);
+                    popup
+                        .setLngLat(feature.geometry.coordinates)
+                        .setText(
+                            prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')'
+
+                        )
+                        .addTo(map);
+                });
+                listingEl.appendChild(item);
+            });
+
+            // Show the filter input
+            filterEl.parentNode.style.display = 'block';
+        } else if (features.length === 0 && filterEl.value !== '') {
+            empty.textContent = 'No results found';
+            listingEl.appendChild(empty);
+        } else {
+            empty.textContent = 'Drag the map to populate results';
+            listingEl.appendChild(empty);
+
+            // Hide the filter input
+            filterEl.parentNode.style.display = 'none';
+
+            // remove features filter
+            // map.setFilter('sta', ['has', 'abbrev']);
+        }
+    }
+
+    function normalize(string) {
+        return string.trim().toLowerCase();
+    }
+
+    function getUniqueFeatures(array, comparatorProperty) {
+        var existingFeatureKeys = {};
+        // Because features come from tiled vector data, feature geometries may be split
+        // or duplicated across tile boundaries and, as a result, features may appear
+        // multiple times in query results.
+        var uniqueFeatures = array.filter(function (el) {
+            if (existingFeatureKeys[el.properties[comparatorProperty]]) {
+                return false;
+            } else {
+                existingFeatureKeys[el.properties[comparatorProperty]] = true;
+                return true;
+            }
+        });
+
+        return uniqueFeatures;
+    }
+
+    map.on('load', function () {
+        map.addSource('stations', {
+            'type': 'geojson',
+            'data': datas,
+            @*'data': 'https://run.mocky.io/v3/3f6bca84-35b5-4ea7-9c5f-3aaf28ef1a8c'*@
+        });
+
+        map.addLayer({
+            'id': 'sta',
+            'source': 'stations',
+            'type': 'symbol',
+            'layout': {
+                'icon-image': 'car-15',
+                'icon-padding': 0,
+                'icon-allow-overlap': true
+            }
+        });
+
+        map.on('mousemove', 'sta', function (e) {
+            // Change the cursor style as a UI indicator.
+            map.getCanvas().style.cursor = 'pointer';
+
+            // Populate the popup and set its coordinates based on the feature.
+            var feature = e.features[0];
+            var prop = feature.properties;
+            popup
+                .setLngLat(feature.geometry.coordinates)
+                .setText(
+                    prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')'
+                )
+                .addTo(map);
+        });
+
+        onmove();
+        map.on('move', function () {
+            onmove();
+        });
+    });
+
+    function onmove() {
+        var features = map.queryRenderedFeatures({ layers: ['sta'] });
+
+        if (features) {
+            var uniqueFeatures = getUniqueFeatures(features, 'localisation');
+            // Populate features for the listing overlay.
+            renderListings(uniqueFeatures);
+
+            // Clear the input container
+            filterEl.value = '';
+
+            // Store the current features in sn `airports` variable to
+            // later use for filtering on `keyup`.
+            stations = uniqueFeatures;
+        }
+    }
+</script>
+
+<style>
+
+    #map {
+        position: absolute;
+        left: 20%;
+        top: 7%;
+        bottom: 0;
+        width: 75%;
+    }
+
+    .map-overlay {
+        position: fixed;
+        width: 25%;
+        top: 7%;
+        bottom: 0;
+        left: 0;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #fff;
+        max-height: 100%;
+        overflow: hidden;
+    }
+
+    .map-overlay fieldset {
+        display: none;
+        background: #ddd;
+        border: none;
+        padding: 10px;
+        margin: 0;
+    }
+
+    .map-overlay input {
+        display: block;
+        border: none;
+        width: 50%;
+        border-radius: 3px;
+        padding: 10px;
+        margin: 0;
+        box-sizing: border-box;
+    }
+
+    .map-overlay .listing {
+        overflow: auto;
+        max-height: 60%;
+    }
+
+    .map-overlay .listing > * {
+        display: block;
+        padding: 5px 10px;
+        margin: 0;
+    }
+
+    .map-overlay .listing a {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        color: #404;
+        text-decoration: none;
+    }
+
+    .map-overlay .listing a:last-child {
+        border: none;
+    }
+
+    .map-overlay .listing a:hover {
+        background: #f0f0f0;
+    }
+</style>

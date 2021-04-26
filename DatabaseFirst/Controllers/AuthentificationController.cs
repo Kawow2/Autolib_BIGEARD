@@ -22,60 +22,60 @@ namespace DatabaseFirst.Controllers
         public ActionResult Index()
         {
             return View();
+            //https://stackoverflow.com/questions/21762077/asp-net-identity-and-claims/21967027
         }
 
-        //[HttpPost]
-        //public async Task<ActionResult> Login(string nom, string prenom)
-        //{
-        //    var db = new AutolibContext();
-
-        //    var user = db.Clients.FirstOrDefault(x => x.Nom == nom && x.Prenom == prenom);
-
-            
-        //    if (user != null)
-        //    {//connection
-        //        //var claims = new List<Claim>()
-        //        //{
-        //        //    new Claim(ClaimTypes.Name,user.Nom),
-        //        //    new Claim("Prenom",user.Prenom),
-        //        //    new Claim("Id",user.IdClient.ToString()),
-        //        //};
-
-        //        //var identity = new ClaimsIdentity(claims, "TestClaims");
-        //        //var userPrincipal = new ClaimsPrincipal(new[] { identity });
-
-        //        //await HttpContext.SignInAsync(userPrincipal);
-        //    }
-            
-        //    return RedirectToAction("Index", "Home");
-        //}
-        public ActionResult Login()
-        {
-            var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name,"LAROSE"),
-                    new Claim("Prenom","SOLANGE"),
-                    new Claim("Id","1"),
-                };
-
-            var identity = new ClaimsIdentity(claims, "TestClaims");
-            var userPrincipal = new ClaimsPrincipal(new[] { identity });
-
-            HttpContext.SignInAsync(userPrincipal);
-            return RedirectToAction("Index", "Home");
-
-        }
         [HttpPost]
-        public ActionResult Register(string nom, string prenom)
+        public  ActionResult Login(string nom, string prenom)
         {
-            return RedirectToAction("Index", "Home");
+            var db = new AutolibContext();
+            var user = db.Clients.FirstOrDefault(x => x.Nom == nom && x.Prenom == prenom);
+            if (user != null)
+            {//connection
+                var claims = new List<Claim>()
+                {
+                    //new Claim(ClaimTypes.Name,user.Nom),
+                    //new Claim("Prenom",user.Prenom),
+                    new Claim("IdClient",user.IdClient.ToString()),
+                };
+                var identity = new ClaimsIdentity(claims, "Identity");
+                var userPrincipal = new ClaimsPrincipal(new[] { identity });
 
-        }
-        public ActionResult Register()
-        {
-            return RedirectToAction("Index", "Home");
+                HttpContext.SignInAsync(userPrincipal);
+                HttpContext.Session.SetObject("CurrentUser", user);
+                var listStations = db.Stations.ToList();
+                HttpContext.Session.SetObject("ListStations", listStations);
 
+            }
+            return RedirectToAction("Index", "Home");
         }
+        //public ActionResult Login()
+        //{
+        //    //var claims = new List<Claim>()
+        //    //    {
+        //    //        new Claim(ClaimTypes.Name,"LAROSE"),
+        //    //        new Claim("Prenom","SOLANGE"),
+        //    //        new Claim("Id","1"),
+        //    //    };
+
+        //    //var identity = new ClaimsIdentity(claims, "TestClaims");
+        //    //var userPrincipal = new ClaimsPrincipal(new[] { identity });
+
+        //    //HttpContext.SignInAsync(userPrincipal);
+        //    return RedirectToAction("Index", "Home");
+
+        ////}
+        //[HttpPost]
+        //public ActionResult Register(string nom, string prenom)
+        //{
+        //    return RedirectToAction("Index", "Home");
+
+        //}
+        //public ActionResult Register()
+        //{
+        //    return RedirectToAction("Index", "Home");
+
+        //}
 
         public ActionResult Logout()
         {
