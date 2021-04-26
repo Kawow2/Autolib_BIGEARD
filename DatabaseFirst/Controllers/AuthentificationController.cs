@@ -12,17 +12,10 @@ namespace DatabaseFirst.Controllers
 {
     public class AuthentificationController : Controller
     {
-        //private readonly UserManager<ApplicationUser> userManager;
-
-        //public AuthentificationController(UserManager<ApplicationUser> _userManager)
-        //{
-        //    userManager = _userManager;
-        //}
-        // GET: AuthentificationController
+    
         public ActionResult Index()
         {
             return View();
-            //https://stackoverflow.com/questions/21762077/asp-net-identity-and-claims/21967027
         }
 
         [HttpPost]
