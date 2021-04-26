@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DatabaseFirst.Controllers
 {
-    public class AuthentificationController : BaseController
+    public class AuthentificationController : Controller
     {
         //private readonly UserManager<ApplicationUser> userManager;
 
@@ -43,6 +43,9 @@ namespace DatabaseFirst.Controllers
 
                 HttpContext.SignInAsync(userPrincipal);
                 HttpContext.Session.SetObject("CurrentUser", user);
+                var listStations = db.Stations.ToList();
+                HttpContext.Session.SetObject("ListStations", listStations);
+
             }
             return RedirectToAction("Index", "Home");
         }

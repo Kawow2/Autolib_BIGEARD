@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace DatabaseFirst.Controllers
 {
-    public class AccountController : BaseController
+    public class AccountController : Controller
     {
         // GET: AccountController
         public ActionResult Index()
         {
             var user = HttpContext.Session.GetObject<Client>("CurrentUser");
-            //var client = BaseController.CurrentClient;
+            //var client = Controller.CurrentClient;
             return View(user);
         }
         [HttpPost]
