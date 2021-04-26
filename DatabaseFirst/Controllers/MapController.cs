@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace DatabaseFirst.Controllers
@@ -14,11 +15,13 @@ namespace DatabaseFirst.Controllers
         {
             //creation de la map à partir 
             //var str = JsonConvert.SerializeObject(listStations, Formatting.Indented);
-            var data = GenerateMap();
-            return View(data);
+            GenerateMap();
+            return View();
         }
-        [HttpGet]
-        public JsonResult GenerateMap()
+
+        //[HttpGet]
+        
+        public void GenerateMap()
         {
             //creation d'un objet que l'on passe à la vue pour avoir les coordonnées des points
             var listStations = HttpContext.Session.GetObject<List<Station>>("ListStations");
@@ -31,22 +34,26 @@ namespace DatabaseFirst.Controllers
             foreach (var station in listStations)
             {
                 //var coord1 = new MapCoordinates();
-                var coord = new List<decimal>();
-                coord.Add(station.Longitude);
-                coord.Add(station.Latitude);               
+                var coord1 = new List<decimal>();
+                coord1.Add(station.Latitude);
+                coord1.Add(station.Longitude); 
+                 var coord2 = new List<decimal>();
+                coord2.Add(station.Longitude);
+                coord2.Add(station.Latitude);
+
                 var geo = new MapGeometry()
                 {
                     Type = "Point",
-                    Geo_point_2d = coord
+                    Geo_point_2d = coord1
                 };
-                coord.Reverse();
+                coord1.Reverse();
 
                 var prop = new MapProperties()
                 {
                     CodePostal = station.CodePostal.ToString(),
                     Commune = station.Ville,
                     Localisation = station.Numero.ToString() + " " + station.Adresse,
-                    Geo_point_2d = coord,
+                    Geo_point_2d = coord2,
                 };
 
                 var mf = new MapFeatures()
@@ -58,8 +65,8 @@ namespace DatabaseFirst.Controllers
                 mapStation.Features.Add(mf);
             }
 
-            mapStation.JsonValue = JsonConvert.SerializeObject(mapStation, Formatting.Indented);
-            return new JsonResult(mapStation);
+            mapStation.JsonValue = JsonConvert.SerializeObject(mapStation);
+            ViewBag.station = mapStation;
 
         }
 
@@ -73,6 +80,7 @@ namespace DatabaseFirst.Controllers
         public string Type { get; set; }
         [JsonProperty("features")]
         public List<MapFeatures> Features { get; set; } = new List<MapFeatures>();
+        [IgnoreDataMemberAttribute]
         public string JsonValue;
     }
 
