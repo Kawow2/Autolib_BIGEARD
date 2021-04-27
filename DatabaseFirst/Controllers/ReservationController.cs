@@ -14,18 +14,6 @@ namespace DatabaseFirst.Controllers
             return View();
         }
 
-        [HttpPost] // can be HttpGet
-        public ActionResult Reservation(string id)
-        {
-            var db = new AutolibContext();
-            var station = db.Stations.FirstOrDefault(s => s.IdStation == Int32.Parse(id));
-            //ajouter un datatable 
-
-            var obj = new
-            {
-                valid = true
-            };
-            return Json(obj);
-        }
+       
     }
 }

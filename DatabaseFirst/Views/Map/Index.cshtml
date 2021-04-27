@@ -1,5 +1,5 @@
 ﻿@{
-   
+
 
 }
 
@@ -20,6 +20,9 @@
 </div>
 <div style="display: none;" id="url">
 </div>
+@Html.Hidden("RedirectTo", Url.Action("Reservation", "Account"));
+
+
 
 <script>
 
@@ -137,7 +140,7 @@
             var prop = feature.properties;
             var id = prop.idStation;
             @*console.log(id);*@
-            var txt = "<p>" + prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')</p><button onclick="testReservation('+id+')">Réserver</button> ';
+            var txt = "<p>" + prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')</p><button onclick="Reservation('+id+')">Réserver</button> ';
             popup
                 .setLngLat(feature.geometry.coordinates)
                 @*.setText(txt)*@
@@ -170,15 +173,16 @@
 
 
 
-    function testReservation(id) {
+    function Reservation(id) {
         var idStation = id;
         console.log(id);
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/Reservation/Reserver/' + id, true);
+        xhr.open('POST', '/Account/ReturnRoReservation/' + id, true);
         xhr.setRequestHeader('Content-Type', 'text/plain');
 
         xhr.onload = function (idStation) {
-           console.log("requete reussi"+idStation)
+            var url = $("#RedirectTo").val();
+            location.href = url;
         };
 
         xhr.send("123");
@@ -210,46 +214,46 @@
         overflow: hidden;
     }
 
-    .map-overlay fieldset {
-        display: none;
-        background: #ddd;
-        border: none;
-        padding: 10px;
-        margin: 0;
-    }
+        .map-overlay fieldset {
+            display: none;
+            background: #ddd;
+            border: none;
+            padding: 10px;
+            margin: 0;
+        }
 
-    .map-overlay input {
-        display: block;
-        border: none;
-        width: 50%;
-        border-radius: 3px;
-        padding: 10px;
-        margin: 0;
-        box-sizing: border-box;
-    }
+        .map-overlay input {
+            display: block;
+            border: none;
+            width: 50%;
+            border-radius: 3px;
+            padding: 10px;
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-    .map-overlay .listing {
-        overflow: auto;
-        max-height: 60%;
-    }
+        .map-overlay .listing {
+            overflow: auto;
+            max-height: 60%;
+        }
 
-    .map-overlay .listing > * {
-        display: block;
-        padding: 5px 10px;
-        margin: 0;
-    }
+            .map-overlay .listing > * {
+                display: block;
+                padding: 5px 10px;
+                margin: 0;
+            }
 
-    .map-overlay .listing a {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        color: #404;
-        text-decoration: none;
-    }
+            .map-overlay .listing a {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                color: #404;
+                text-decoration: none;
+            }
 
-    .map-overlay .listing a:last-child {
-        border: none;
-    }
+                .map-overlay .listing a:last-child {
+                    border: none;
+                }
 
-    .map-overlay .listing a:hover {
-        background: #f0f0f0;
-    }
+                .map-overlay .listing a:hover {
+                    background: #f0f0f0;
+                }
 </style>

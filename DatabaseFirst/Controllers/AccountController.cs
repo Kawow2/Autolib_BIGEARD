@@ -57,5 +57,23 @@ namespace DatabaseFirst.Controllers
             return RedirectToAction("Index","Home");
         }
 
+        [HttpPost] // can be HttpGet
+        public void ReturnRoReservation(string id)
+        {
+            ViewBag.IdStation = id;
+        }
+
+        public ActionResult Reservation()
+        {
+            var a = ViewBag.IdStation;
+            return View();
+        }
+
+        public void doIt(string id)
+        {
+            RedirectToAction("Test", "Account", new { id = id });
+
+        }
+
     }
 }
