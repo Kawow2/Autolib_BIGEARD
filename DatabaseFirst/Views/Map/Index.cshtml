@@ -6,7 +6,9 @@
 <head>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
 </head>
 
 <div id='map' style='width: 1200px; height: 600px;'></div>
@@ -41,7 +43,7 @@
 
     var filterEl = document.getElementById('feature-filter');
     var listingEl = document.getElementById('feature-listing');
-    var html = '<button id="reservation" onclick="testReservation() >  Réserver </button>';
+    var html = '<button onclick="testReservation()">Réserver</button>';
     var divElement = document.createElement('div');
     divElement.innerHTML = html;
 ;    function renderListings(features) {
@@ -133,7 +135,9 @@
             // Populate the popup and set its coordinates based on the feature.
             var feature = e.features[0];
             var prop = feature.properties;
-            var txt = "<p>" + prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')</p><button onclick="testReservation()">Test</button> ';
+            var id = prop.idStation;
+            @*console.log(id);*@
+            var txt = "<p>" + prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')</p><button onclick="testReservation('+id+')">Réserver</button> ';
             popup
                 .setLngLat(feature.geometry.coordinates)
                 @*.setText(txt)*@
@@ -164,10 +168,22 @@
         }
     }
 
-    
 
-    function testReservation() {
-        console.log("ClickTest");
+
+    function testReservation(id) {
+        var idStation = id;
+        console.log(id);
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Reservation/Reserver/' + id, true);
+        xhr.setRequestHeader('Content-Type', 'text/plain');
+
+        xhr.onload = function (idStation) {
+           console.log("requete reussi"+idStation)
+        };
+
+        xhr.send("123");
+
+
 
     }
 </script>
