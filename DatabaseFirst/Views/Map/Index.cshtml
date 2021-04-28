@@ -174,18 +174,8 @@
 
 
     function Reservation(id) {
-        var idStation = id;
-        console.log(id);
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/Account/ReturnRoReservation/' + id, true);
-        xhr.setRequestHeader('Content-Type', 'text/plain');
-
-        xhr.onload = function (idStation) {
-            var url = $("#RedirectTo").val();
-            location.href = url;
-        };
-
-        xhr.send("123");
+        var url = $("#RedirectTo").val();
+        location.href = url+"/"+id;
 
 
 
