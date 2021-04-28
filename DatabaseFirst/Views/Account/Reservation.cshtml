@@ -22,7 +22,7 @@
                     <th>@col.ColumnName</th>
                 }
                 <th>
-                   Réserver
+                    Réserver
                 </th>
             </tr>
         </thead>
@@ -35,13 +35,50 @@
                         <td>@row[col.ColumnName]</td>
                     }
                 <td>
-                    <button onclick="">Réserver</button>
+                    @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de vehicule")
+                    {
+                        <button onclick="sendReservation(@row["NumBorne"])" disabled>Réserver</button>
+                    }
+                    else
+                    {
+                        <button onclick="sendReservation(@row["NumBorne"])" >Réserver</button>
+                    }
                 </td>
 
                 </tr>
             }
         </tbody>
     </table>
+    @Html.Hidden("RedirectTo", Url.Action("Reservation", "Account"));
+
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Modal Header</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Some text in the modal.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
+
+<script>
+
+    function sendReservation(id) {
+        @*var url = $("#RedirectTo").val();*@
+        location.href = location.href + "/" + id;
+    }
+</script>
 

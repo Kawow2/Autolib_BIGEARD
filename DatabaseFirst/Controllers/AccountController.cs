@@ -94,13 +94,20 @@ namespace DatabaseFirst.Controllers
                     row["NumBorne"] = b.IdBorne;
                     row["IdVehicule"] = 0;
                     row["EtatBatterie"] = 0;
-                    row["Disponibilite"] = "Pas de véhicule";
+                    row["Disponibilite"] = "Place libre : pas de véhicule";
 
                 }
                 dt.Rows.Add(row);
 
             }
             //datatable.Rows = dt.Rows;
+        }
+
+        private void CheckIfReservationEnded()
+        {
+            //https://stackoverflow.com/questions/1088212/how-do-i-perform-date-comparison-in-ef-query
+            //regarde dans le table reservation les reservation d'il y a moins de 1h30. 
+            //pour chaque ligne, si la date de fin est moins d'1h30, je vais changer la disponibilité du véhicule
         }
 
         [Route("Account/Reservation/{id}")]

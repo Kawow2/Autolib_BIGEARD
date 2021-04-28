@@ -23,8 +23,14 @@ namespace DatabaseFirst.Controllers
         
         public void GenerateMap()
         {
+
             //creation d'un objet que l'on passe à la vue pour avoir les coordonnées des points
             var listStations = HttpContext.Session.GetObject<List<Station>>("ListStations");
+            if (listStations == null)
+            {
+                var db = new AutolibContext();
+                listStations = db.Stations.ToList();
+            }
             var mapStation = new MapStation()
             {
                 Type = "FeatureCollection",
