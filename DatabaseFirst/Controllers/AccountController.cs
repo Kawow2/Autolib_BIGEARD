@@ -149,6 +149,21 @@ namespace DatabaseFirst.Controllers
 
             }
 
+          
+            //var stationLibre = new List<Station>();
+            //var isFree = false;
+
+            //foreach (var s in station)
+            //{
+            //    foreach (var b in s.Bornes)
+            //    {
+            //        while (!isFree)
+            //        {
+
+            //        }
+            //    }
+            //}
+
             return View(dt);
         }
 

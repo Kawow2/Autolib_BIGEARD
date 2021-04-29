@@ -58,13 +58,14 @@ namespace DatabaseFirst.Controllers
             foreach(var r in reser)
             {
                 var row = dt.NewRow();
-                row["Vehicule"] = r.Client;
+                row["Vehicule"] = r.Vehicule;
                 row["Date de reservation"] = r.DateReservation;
                 row["Date echeance"] = r.DateEcheance;
                 dt.Rows.Add(row);
 
             }
-
+            var stations = db.Stations.ToList();
+            ViewBag.Stations = stations;
 
             return View(dt);
 

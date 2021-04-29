@@ -4,6 +4,7 @@
 @{
     @model System.Data.DataTable
     @using System.Data;
+
 }
 
 
@@ -67,21 +68,16 @@
                         <div class="form-group">
                             <label for="sel1">Select list (select one):</label>
                             <select class="form-control" id="sel1">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
+                                @foreach(var s in ViewBag.Stations)
+                                {
+                                    <option>@(s.IdStation + " : "+ s.Numero + " " + s.Adresse)</option>
+                                }
                             </select>                            
-                        </div>
-                        <div>
-                            <button>
-                                Valider
-                            </button>
-                        </div>
+                        </div>                      
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Valider</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" onclick="utiliser()">Valider</button>
                 </div>
             </div>
 
@@ -93,7 +89,9 @@
 
 <script>
     function utiliser(v) {
-        console.log(v);
+        var e = document.getElementById("sel1");
+        var value = e.value;
+        console.log(value)
     }
 
     var modal = document.getElementById("myModal");
