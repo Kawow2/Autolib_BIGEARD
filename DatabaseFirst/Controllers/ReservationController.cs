@@ -33,7 +33,7 @@ namespace DatabaseFirst.Controllers
             {
                 Client = client.IdClient,
                 DateReservation = time,
-                DateEcheance = time.AddMinutes(5),
+                DateEcheance = time.AddMinutes(60),
                 Vehicule = (int)idVehicule
             };
 
@@ -43,6 +43,33 @@ namespace DatabaseFirst.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-       
+        public ActionResult MesReservations()
+        {
+            var db = new AutolibContext();
+            var user = HttpContext.Session.GetObject<Client>("CurrentUser");
+            var reser = db.Reservations.Where(c => c.Client == user.IdClient).ToList();
+
+            var dt = new DataTable();
+            dt.Columns.Add("Vehicule", typeof(int));
+            //dt.Columns.Add("CatVehicule", typeof(int));
+            dt.Columns.Add("Date de reservation", typeof(DateTime));
+            dt.Columns.Add("Date echeance", typeof(DateTime));
+            reser.OrderByDescending(r => r.DateEcheance);
+            foreach(var r in reser)
+            {
+                var row = dt.NewRow();
+                row["Vehicule"] = r.Client;
+                row["Date de reservation"] = r.DateReservation;
+                row["Date echeance"] = r.DateEcheance;
+                dt.Rows.Add(row);
+
+            }
+
+
+            return View(dt);
+
+        }
+
+
     }
 }

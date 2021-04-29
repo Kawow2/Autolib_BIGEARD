@@ -62,46 +62,46 @@ namespace DatabaseFirst.Controllers
             return RedirectToAction("Index","Home");
         }
 
-        [HttpPost] // can be HttpGet
-        public void ReturnRoReservation(string id)
-        {
-            ViewBag.IdStation = id;
-            int? IdStation = Int32.Parse(id);
-            var db = new AutolibContext();
-            var bornes = db.Bornes.Where(x => x.Station == IdStation).ToList();
-            var dt = new DataTable();
-            dt.Columns.Add("NumBorne", typeof(int));
-            dt.Columns.Add("IdVehicule", typeof(int));
-            //dt.Columns.Add("CatVehicule", typeof(int));
-            dt.Columns.Add("EtatBatterie", typeof(int));
-            dt.Columns.Add("Disponibilite", typeof(string));
+        //[HttpPost] // can be HttpGet
+        //public void ReturnRoReservation(string id)
+        //{
+        //    ViewBag.IdStation = id;
+        //    int? IdStation = Int32.Parse(id);
+        //    var db = new AutolibContext();
+        //    var bornes = db.Bornes.Where(x => x.Station == IdStation).ToList();
+        //    var dt = new DataTable();
+        //    dt.Columns.Add("NumBorne", typeof(int));
+        //    dt.Columns.Add("IdVehicule", typeof(int));
+        //    //dt.Columns.Add("CatVehicule", typeof(int));
+        //    dt.Columns.Add("EtatBatterie", typeof(int));
+        //    dt.Columns.Add("Disponibilite", typeof(string));
 
-            foreach (var b in bornes)
-            {
-                var row = dt.NewRow();
-                if (b.IdVehicule != null)
-                {
+        //    foreach (var b in bornes)
+        //    {
+        //        var row = dt.NewRow();
+        //        if (b.IdVehicule != null)
+        //        {
                     
-                    var v = db.Vehicules.FirstOrDefault(v => v.IdVehicule == b.IdVehicule);
-                    //dt.Rows.Add(b.IdBorne, v.IdVehicule , v.EtatBatterie ?? 0, v.Disponibilite ?? "");
-                    row["NumBorne"] = b.IdBorne;
-                    row["IdVehicule"] = v.IdVehicule;
-                    row["EtatBatterie"] = v.EtatBatterie ?? 0;
-                    row["Disponibilite"] = v.Disponibilite ?? "";
-                }
-                else
-                {
-                    row["NumBorne"] = b.IdBorne;
-                    row["IdVehicule"] = 0;
-                    row["EtatBatterie"] = 0;
-                    row["Disponibilite"] = "Place libre : pas de véhicule";
+        //            var v = db.Vehicules.FirstOrDefault(v => v.IdVehicule == b.IdVehicule);
+        //            //dt.Rows.Add(b.IdBorne, v.IdVehicule , v.EtatBatterie ?? 0, v.Disponibilite ?? "");
+        //            row["NumBorne"] = b.IdBorne;
+        //            row["IdVehicule"] = v.IdVehicule;
+        //            row["EtatBatterie"] = v.EtatBatterie ?? 0;
+        //            row["Disponibilite"] = v.Disponibilite ?? "";
+        //        }
+        //        else
+        //        {
+        //            row["NumBorne"] = b.IdBorne;
+        //            row["IdVehicule"] = 0;
+        //            row["EtatBatterie"] = 0;
+        //            row["Disponibilite"] = "Place libre : pas de véhicule";
 
-                }
-                dt.Rows.Add(row);
+        //        }
+        //        dt.Rows.Add(row);
 
-            }
-            //datatable.Rows = dt.Rows;
-        }
+        //    }
+        //    //datatable.Rows = dt.Rows;
+        //}
 
         private void CheckIfReservationEnded()
         {
