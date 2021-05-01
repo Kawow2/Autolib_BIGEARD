@@ -23,8 +23,14 @@ namespace DatabaseFirst.Controllers
         
         public void GenerateMap()
         {
+
             //creation d'un objet que l'on passe à la vue pour avoir les coordonnées des points
             var listStations = HttpContext.Session.GetObject<List<Station>>("ListStations");
+            if (listStations == null)
+            {
+                var db = new AutolibContext();
+                listStations = db.Stations.ToList();
+            }
             var mapStation = new MapStation()
             {
                 Type = "FeatureCollection",
@@ -54,6 +60,7 @@ namespace DatabaseFirst.Controllers
                     Commune = station.Ville,
                     Localisation = station.Numero.ToString() + " " + station.Adresse,
                     Geo_point_2d = coord2,
+                    IdStation = station.IdStation.ToString()
                 };
 
                 var mf = new MapFeatures()
@@ -69,6 +76,8 @@ namespace DatabaseFirst.Controllers
             ViewBag.station = mapStation;
 
         }
+
+        
 
     }
 
@@ -107,6 +116,8 @@ namespace DatabaseFirst.Controllers
         public string Localisation { get; set; }
         [JsonProperty("code_insee")]
         public string CodePostal { get; set; }
+        [JsonProperty("idStation")]
+        public string IdStation { get; set; }
     }
 
     public class MapGeometry

@@ -42,34 +42,7 @@ namespace DatabaseFirst.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-        //public ActionResult Login()
-        //{
-        //    //var claims = new List<Claim>()
-        //    //    {
-        //    //        new Claim(ClaimTypes.Name,"LAROSE"),
-        //    //        new Claim("Prenom","SOLANGE"),
-        //    //        new Claim("Id","1"),
-        //    //    };
-
-        //    //var identity = new ClaimsIdentity(claims, "TestClaims");
-        //    //var userPrincipal = new ClaimsPrincipal(new[] { identity });
-
-        //    //HttpContext.SignInAsync(userPrincipal);
-        //    return RedirectToAction("Index", "Home");
-
-        ////}
-        //[HttpPost]
-        //public ActionResult Register(string nom, string prenom)
-        //{
-        //    return RedirectToAction("Index", "Home");
-
-        //}
-        //public ActionResult Register()
-        //{
-        //    return RedirectToAction("Index", "Home");
-
-        //}
-
+        
         public ActionResult Logout()
         {
             HttpContext.SignOutAsync();

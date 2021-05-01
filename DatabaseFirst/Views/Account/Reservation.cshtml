@@ -1,0 +1,66 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    @model System.Data.DataTable
+    @using System.Data;
+}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+
+<body>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                @foreach (DataColumn col in Model.Columns)
+                {
+                    <th>@col.ColumnName</th>
+                }
+                <th>
+                    Réserver
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <td>@row[col.ColumnName]</td>
+                    }
+                <td>
+                    @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de véhicule")
+                    {
+                        <button onclick="sendReservation(@row["NumBorne"])" disabled>Réserver</button>
+                    }
+                    else
+                    {
+                        <button onclick="sendReservation(@row["NumBorne"])" >Réserver</button>
+                    }
+                </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+    @Html.Hidden("RedirectTo", Url.Action("Reservation", "Account"));
+
+
+    
+</body>
+</html>
+
+<script>
+
+    function sendReservation(id) {
+        @*var url = $("#RedirectTo").val();*@
+        location.href = location.href + "/" + id;
+    }
+</script>
+

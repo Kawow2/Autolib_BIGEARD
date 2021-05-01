@@ -1,12 +1,14 @@
 ﻿@{
-   
+
 
 }
 
 <head>
     <script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
 </head>
 
 <div id='map' style='width: 1200px; height: 600px;'></div>
@@ -18,6 +20,9 @@
 </div>
 <div style="display: none;" id="url">
 </div>
+@Html.Hidden("RedirectTo", Url.Action("Reservation", "Account"));
+
+
 
 <script>
 
@@ -41,8 +46,10 @@
 
     var filterEl = document.getElementById('feature-filter');
     var listingEl = document.getElementById('feature-listing');
-
-    function renderListings(features) {
+    var html = '<button onclick="testReservation()">Réserver</button>';
+    var divElement = document.createElement('div');
+    divElement.innerHTML = html;
+;    function renderListings(features) {
         var empty = document.createElement('p');
         // Clear any existing listings
         listingEl.innerHTML = '';
@@ -63,8 +70,8 @@
                         .setText(
                             prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')'
 
-                        )
-                        .addTo(map);
+                    ).setHTML(divElement.innerHTML)
+                    .addTo(map);
                 });
                 listingEl.appendChild(item);
             });
@@ -106,7 +113,6 @@
 
         return uniqueFeatures;
     }
-    //var dataTest = "{"type":"FeatureCollection","features":[{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.246596566884123, 48.83449938035934]}, "properties": {"num_loc": "81", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 81", "geo_point_2d": [48.8344993804, 2.24659656688], "localisation": "AVENUE EDOUARD VAILLANT", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.240834214025122, 48.82609397336056]}, "properties": {"num_loc": "30", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "30", "geo_point_2d": [48.8260939734, 2.24083421403], "localisation": "RUE MARCEL BONTEMPS", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.229433406953691, 48.84013234232603]}, "properties": {"num_loc": "121", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 121", "geo_point_2d": [48.8401323423, 2.22943340695], "localisation": "AVENUE ANDRE MORIZET", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2463868091556742, 48.82862066373591]}, "properties": {"num_loc": "245", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 245", "geo_point_2d": [48.8286206637, 2.24638680916], "localisation": "BOULEVARD JEAN JAURES", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2421129727544082, 48.82807848755925]}, "properties": {"num_loc": "40", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 40", "geo_point_2d": [48.8280784876, 2.24211297275], "localisation": "RUE DE MEUDON", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.230029059751153, 48.831502264361525]}, "properties": {"num_loc": "80", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 80", "geo_point_2d": [48.8315022644, 2.23002905975], "localisation": "RUE DE SEVRES", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.254261989848124, 48.831862471035365]}, "properties": {"num_loc": "24", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 24", "geo_point_2d": [48.831862471, 2.25426198985], "localisation": "BOULEVARD DE LA REPUBLIQUE", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.239309437082668, 48.83658831093053]}, "properties": {"num_loc": "114", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 114", "geo_point_2d": [48.8365883109, 2.23930943708], "localisation": "RUE GALLIENI", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.225487996781482, 48.83528782542917]}, "properties": {"num_loc": "35", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 35", "geo_point_2d": [48.8352878254, 2.22548799678], "localisation": "QUAI  ALPHONSE LE GALLO", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.236834493450596, 48.85047057929734]}, "properties": {"num_loc": "4", "commune": "BOULOGNE - BILLANCOURT", "localisation": "BOULEVARD ANATOLE FRANCE", "geo_point_2d": [48.8504705793, 2.23683449345], "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.250123162827825, 48.8388585182741]}, "properties": {"num_loc": "12", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 12 bis", "geo_point_2d": [48.8388585183, 2.25012316283], "localisation": "ROUTE DE LA REINE", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.23988706792845, 48.83988753638806]}, "properties": {"num_loc": "61", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 61", "geo_point_2d": [48.8398875364, 2.23988706793], "localisation": "BOULEVARD JEAN JAURES", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2523471438008, 48.83664790545613]}, "properties": {"num_loc": "2", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 2", "geo_point_2d": [48.8366479055, 2.2523471438], "localisation": "RUE HENRI MARTIN", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.258192904252405, 48.833771716085685]}, "properties": {"num_loc": "6", "commune": "BOULOGNE - BILLANCOURT", "comp_loc": "devant le 6", "geo_point_2d": [48.8337717161, 2.25819290425], "localisation": "PLACE ABEL GANCE", "code_insee": "92012"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.185353024456625, 48.80562515508095]}, "properties": {"num_loc": "33", "commune": "CHAVILLE", "comp_loc": "devant le 33", "geo_point_2d": [48.8056251551, 2.18535302446], "localisation": "RUE DU PAVE DES GARDES", "code_insee": "92022"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.193315668083288, 48.814732372861606]}, "properties": {"num_loc": "705", "commune": "CHAVILLE", "comp_loc": "devant le 705", "geo_point_2d": [48.8147323729, 2.19331566808], "localisation": "AVENUE ROGER SALENGRO", "code_insee": "92022"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.188340726993066, 48.803772499918054]}, "properties": {"num_loc": "28", "commune": "CHAVILLE", "comp_loc": "vis \u00e0 vis du 28", "geo_point_2d": [48.8037724999, 2.18834072699], "localisation": "RUE ANATOLE FRANCE", "code_insee": "92022"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.261257290162221, 48.82920014196124]}, "properties": {"num_loc": "127", "commune": "ISSY - LES - MOULINEAUX", "localisation": "QUAI DE LA BATAILLE DE STALINGRAD", "geo_point_2d": [48.829200142, 2.26125729016], "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.266145054125836, 48.83137156707838]}, "properties": {"num_loc": "46", "commune": "ISSY - LES - MOULINEAUX", "comp_loc": "devant le 46", "geo_point_2d": [48.8313715671, 2.26614505413], "localisation": "RUE JOSEPH FRANTZ", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.260306996242058, 48.81662318375985]}, "properties": {"localisation": "RUE DE L'EGALITE", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "le long du cimeti\u00e8re", "geo_point_2d": [48.8166231838, 2.26030699624], "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.267548170052582, 48.82694914148473]}, "properties": {"num_loc": "72", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 72", "geo_point_2d": [48.8269491415, 2.26754817005], "localisation": "BOULEVARD GALLIENI", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.257941370188441, 48.818885907791234]}, "properties": {"num_loc": "66", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "66", "geo_point_2d": [48.8188859078, 2.25794137019], "localisation": "BOULEVARD RODIN", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.261299790543822, 48.8216237573087]}, "properties": {"num_loc": "18", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 18", "geo_point_2d": [48.8216237573, 2.26129979054], "localisation": "BOULEVARD GARIBALDI", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.277806040953008, 48.81878488747149]}, "properties": {"num_loc": "88", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 88", "geo_point_2d": [48.8187848875, 2.27780604095], "localisation": "AVENUE DU GENERAL DE GAULLE", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.267865679645599, 48.82490812038148]}, "properties": {"num_loc": "94", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 94", "geo_point_2d": [48.8249081204, 2.26786567965], "localisation": "BOULEVARD GALLIENI", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.264134174662591, 48.82929732445441]}, "properties": {"num_loc": "31", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 31", "geo_point_2d": [48.8292973245, 2.26413417466], "localisation": "RUE CAMILLE DESMOULINS", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.283403919192811, 48.829380370875946]}, "properties": {"num_loc": "9", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 9", "geo_point_2d": [48.8293803709, 2.28340391919], "localisation": "RUE ERNEST RENAN", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2532924864954422, 48.81867294838628]}, "properties": {"num_loc": "135", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 135", "geo_point_2d": [48.8186729484, 2.2532924865], "localisation": "AVENUE DE VERDUN", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.278435373136249, 48.83084775717996]}, "properties": {"num_loc": "16", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 16", "geo_point_2d": [48.8308477572, 2.27843537314], "localisation": "RUE GUYNEMER", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.276680179994798, 48.82705535775446]}, "properties": {"num_loc": "7", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 7", "geo_point_2d": [48.8270553578, 2.27668017999], "localisation": "RUE VAUDETARD", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.270017643664723, 48.81740515832223]}, "properties": {"num_loc": "166", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 166", "geo_point_2d": [48.8174051583, 2.27001764366], "localisation": "PROMENADE DU VERGER", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.275188425893613, 48.8248903919702]}, "properties": {"num_loc": "46", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 46", "geo_point_2d": [48.824890392, 2.27518842589], "localisation": "RUE DU GENERAL LECLERC", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.274525679200028, 48.828249759554026]}, "properties": {"num_loc": "48", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 48/50", "geo_point_2d": [48.8282497596, 2.2745256792], "localisation": "RUE GUYNEMER", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.275585409747782, 48.822989268633044]}, "properties": {"num_loc": "22", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 22", "geo_point_2d": [48.8229892686, 2.27558540975], "localisation": "AVENUE JEAN JAURES", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.249936969989056, 48.8225816964674]}, "properties": {"num_loc": "21", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 21", "geo_point_2d": [48.8225816965, 2.24993696999], "localisation": "BOULEVARD DES ILES", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.26195567558653, 48.82384777975906]}, "properties": {"num_loc": "1", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 1", "geo_point_2d": [48.8238477798, 2.26195567559], "localisation": "RUE RENE JACQUES", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.252328763377788, 48.821973890112375]}, "properties": {"num_loc": "44", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 44", "geo_point_2d": [48.8219738901, 2.25232876338], "localisation": "RUE DE CHAMP CHARDON", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.26807409579373, 48.832844625171276]}, "properties": {"num_loc": "28", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 28", "geo_point_2d": [48.8328446252, 2.26807409579], "localisation": "RUE BARA", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.265981926838065, 48.81960841735573]}, "properties": {"num_loc": "1", "commune": "ISSY-LES-MOULINEAUX", "comp_loc": "devant le 1", "geo_point_2d": [48.8196084174, 2.26598192684], "localisation": "PLACE DU BACHAGA BOUALAM", "code_insee": "92040"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.211231843303099, 48.788502411895884]}, "properties": {"num_loc": "3", "commune": "MEUDON", "comp_loc": "devant le 3", "geo_point_2d": [48.7885024119, 2.2112318433], "localisation": "RUE JEANNE BRACONNIER", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.235226336447548, 48.82027469134481]}, "properties": {"num_loc": "10", "commune": "MEUDON", "comp_loc": "devant le 10", "geo_point_2d": [48.8202746913, 2.23522633645], "localisation": "RUE DE LA VERRERIE", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.241280772910965, 48.80833157650245]}, "properties": {"num_loc": "72", "commune": "MEUDON", "comp_loc": "face au 72", "geo_point_2d": [48.8083315765, 2.24128077291], "localisation": "AVENUE JEAN JAURES", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.238050533225779, 48.81241239808556]}, "properties": {"num_loc": "2", "commune": "MEUDON", "comp_loc": "sur le parking, devant le 2", "geo_point_2d": [48.8124123981, 2.23805053323], "localisation": "RUE DU PONCEAU", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.228446325288166, 48.78778134848989]}, "properties": {"num_loc": "19", "commune": "MEUDON", "comp_loc": "devant le 19", "geo_point_2d": [48.7877813485, 2.22844632529], "localisation": "AVENUE DU GENERAL DE GAULLE", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.227663801668661, 48.82138323225189]}, "properties": {"num_loc": "12", "commune": "MEUDON", "comp_loc": "sur le parking, vis \u00e0 vis du 12", "geo_point_2d": [48.8213832323, 2.22766380167], "localisation": "RUE MARCEL ALLEGOT", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.235347363657195, 48.80788617644946]}, "properties": {"num_loc": "3", "commune": "MEUDON", "comp_loc": "sur le parking, devant le 3 bis", "geo_point_2d": [48.8078861764, 2.23534736366], "localisation": "RUE TERRE NEUVE", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.217247148161, 48.787674083291954]}, "properties": {"num_loc": "18", "commune": "MEUDON", "comp_loc": "devant le 18", "geo_point_2d": [48.7876740833, 2.21724714816], "localisation": "AVENUE DU MARECHAL JUIN", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.247809143552129, 48.81684642908278]}, "properties": {"num_loc": "6", "commune": "MEUDON", "comp_loc": "devant le 6", "geo_point_2d": [48.8168464291, 2.24780914355], "localisation": "RUE DE PARIS", "code_insee": "92048"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.224969589278385, 48.82879479011847]}, "properties": {"localisation": "PARKING DE L'ILE DE MONSIEUR SUD", "commune": "SEVRES", "geo_point_2d": [48.8287947901, 2.22496958928], "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.223034374431944, 48.82678548826429]}, "properties": {"num_loc": "2", "commune": "SEVRES", "comp_loc": "Angle de la rue du Vieux Port", "geo_point_2d": [48.8267854883, 2.22303437443], "localisation": "AVENUE DE LA CRISTALLERIE", "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.200206193706195, 48.82623428207245]}, "properties": {"num_loc": "1", "commune": "SEVRES", "comp_loc": "Angle de la rue de S\u00e8vres", "geo_point_2d": [48.8262342821, 2.20020619371], "localisation": "RUE RIOCREUX", "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.213464879321657, 48.81269015221975]}, "properties": {"num_loc": "63 - 65", "commune": "SEVRES", "localisation": "RUE DE WOLFENBUTTEL", "geo_point_2d": [48.8126901522, 2.21346487932], "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.205202748647012, 48.821739768060795]}, "properties": {"num_loc": "123", "commune": "SEVRES", "localisation": "GRANDE RUE", "geo_point_2d": [48.8217397681, 2.20520274865], "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.213675067511764, 48.82458862641047]}, "properties": {"num_loc": "53", "commune": "SEVRES", "localisation": "GRANDE RUE", "geo_point_2d": [48.8245886264, 2.21367506751], "code_insee": "92072"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.290318627462174, 48.82584916464587]}, "properties": {"num_loc": "101", "commune": "VANVES", "comp_loc": "devant le 101", "geo_point_2d": [48.8258491646, 2.29031862746], "localisation": "RUE JEAN JAURES", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2839484600978652, 48.82230897243511]}, "properties": {"num_loc": "7", "commune": "VANVES", "comp_loc": "devant le 7", "geo_point_2d": [48.8223089724, 2.2839484601], "localisation": "RUE PRUVOT", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.291444609979786, 48.821159840005826]}, "properties": {"num_loc": "9", "commune": "VANVES", "comp_loc": "devant le 9", "geo_point_2d": [48.82115984, 2.29144460998], "localisation": "RUE RENE SAHORS", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.296341167983662, 48.82324512980581]}, "properties": {"num_loc": "77", "commune": "VANVES", "comp_loc": "vis \u00e0 vis du 77", "geo_point_2d": [48.8232451298, 2.29634116798], "localisation": "RUE JEAN BLEUZEN", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.2805441705723393, 48.81677611238149]}, "properties": {"num_loc": "12", "commune": "VANVES", "comp_loc": "devant le 12", "geo_point_2d": [48.8167761124, 2.28054417057], "localisation": "RUE LARMEROUX", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.288481736077204, 48.82105666708054]}, "properties": {"num_loc": "34", "commune": "VANVES", "comp_loc": "devant le 34", "geo_point_2d": [48.8210566671, 2.28848173608], "localisation": "RUE ANTOINE FRATACCI", "code_insee": "92075"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.189508926963666, 48.82605079590836]}, "properties": {"num_loc": "1", "commune": "VILLE D'AVRAY", "comp_loc": "devant le 1", "geo_point_2d": [48.8260507959, 2.18950892696], "localisation": "PLACE CHARLES DE GAULLE", "code_insee": "92077"}},{"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.16489074117338, 48.817987188712415]}, "properties": {"num_loc": "213", "commune": "VILLE D'AVRAY", "comp_loc": "vis \u00e0 vis du 213", "geo_point_2d": [48.8179871887, 2.16489074117], "localisation": "RUE DE VERSAIILLES", "code_insee": "92077"}}]}";
 
     map.on('load', function () {
         map.addSource('stations', {
@@ -132,11 +138,13 @@
             // Populate the popup and set its coordinates based on the feature.
             var feature = e.features[0];
             var prop = feature.properties;
+            var id = prop.idStation;
+            @*console.log(id);*@
+            var txt = "<p>" + prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')</p><button onclick="Reservation('+id+')">Réserver</button> ';
             popup
                 .setLngLat(feature.geometry.coordinates)
-                .setText(
-                    prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')'
-                )
+                @*.setText(txt)*@
+                .setHTML(txt)
                 .addTo(map);
         });
 
@@ -162,6 +170,15 @@
             stations = uniqueFeatures;
         }
     }
+
+
+
+    function Reservation(id) {
+        var url = $("#RedirectTo").val();
+        console.log(url);
+        console.log(location.href);
+        location.href = url+"/"+id;
+    }
 </script>
 
 <style>
@@ -186,46 +203,46 @@
         overflow: hidden;
     }
 
-    .map-overlay fieldset {
-        display: none;
-        background: #ddd;
-        border: none;
-        padding: 10px;
-        margin: 0;
-    }
+        .map-overlay fieldset {
+            display: none;
+            background: #ddd;
+            border: none;
+            padding: 10px;
+            margin: 0;
+        }
 
-    .map-overlay input {
-        display: block;
-        border: none;
-        width: 50%;
-        border-radius: 3px;
-        padding: 10px;
-        margin: 0;
-        box-sizing: border-box;
-    }
+        .map-overlay input {
+            display: block;
+            border: none;
+            width: 50%;
+            border-radius: 3px;
+            padding: 10px;
+            margin: 0;
+            box-sizing: border-box;
+        }
 
-    .map-overlay .listing {
-        overflow: auto;
-        max-height: 60%;
-    }
+        .map-overlay .listing {
+            overflow: auto;
+            max-height: 60%;
+        }
 
-    .map-overlay .listing > * {
-        display: block;
-        padding: 5px 10px;
-        margin: 0;
-    }
+            .map-overlay .listing > * {
+                display: block;
+                padding: 5px 10px;
+                margin: 0;
+            }
 
-    .map-overlay .listing a {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        color: #404;
-        text-decoration: none;
-    }
+            .map-overlay .listing a {
+                border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+                color: #404;
+                text-decoration: none;
+            }
 
-    .map-overlay .listing a:last-child {
-        border: none;
-    }
+                .map-overlay .listing a:last-child {
+                    border: none;
+                }
 
-    .map-overlay .listing a:hover {
-        background: #f0f0f0;
-    }
+                .map-overlay .listing a:hover {
+                    background: #f0f0f0;
+                }
 </style>
