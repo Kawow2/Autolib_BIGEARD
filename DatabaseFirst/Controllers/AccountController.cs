@@ -103,12 +103,6 @@ namespace DatabaseFirst.Controllers
         //    //datatable.Rows = dt.Rows;
         //}
 
-        private void CheckIfReservationEnded()
-        {
-            //https://stackoverflow.com/questions/1088212/how-do-i-perform-date-comparison-in-ef-query
-            //regarde dans le table reservation les reservation d'il y a moins de 1h30. 
-            //pour chaque ligne, si la date de fin est moins d'1h30, je vais changer la disponibilité du véhicule
-        }
 
         [Route("Account/Reservation/{id}")]
         public ActionResult Reservation(string id)
@@ -116,6 +110,7 @@ namespace DatabaseFirst.Controllers
 
             //int? IdStation = Int32.Parse(id);
             var db = new AutolibContext();
+            checkReservation(id);
             var bornes = db.Bornes.Where(x => x.Station == Int32.Parse(id)).ToList();
             var dt = new DataTable();
             dt.Columns.Add("NumBorne", typeof(int));
@@ -148,25 +143,39 @@ namespace DatabaseFirst.Controllers
                 dt.Rows.Add(row);
 
             }
-
-          
-            //var stationLibre = new List<Station>();
-            //var isFree = false;
-
-            //foreach (var s in station)
-            //{
-            //    foreach (var b in s.Bornes)
-            //    {
-            //        while (!isFree)
-            //        {
-
-            //        }
-            //    }
-            //}
+            
 
             return View(dt);
         }
+        /// <summary>
+        /// regarde si les véhicule sont toujours réservé, et repasse leur état à LIBRE s'ils ne le sont pas 
+        /// </summary>
 
+        public void checkReservation(string idStation)
+        {
+            var db = new AutolibContext();
+            var bornes = db.Bornes.Where(x => x.Station == Int32.Parse(idStation)).ToList();
+
+
+            foreach (var borne in bornes)
+            {
+                if (borne.IdVehicule != null)
+                {
+                    var vehicule = db.Vehicules.FirstOrDefault(v => v.IdVehicule == borne.IdVehicule);
+                    if (vehicule.Disponibilite != "LIBRE")
+                    {
+                        var reser = db.Reservations.Where(r => r.Vehicule == vehicule.IdVehicule).OrderByDescending(v => v.DateEcheance).FirstOrDefault();
+                        if (reser.DateEcheance < DateTime.Now)
+                        {
+                            vehicule.Disponibilite = "LIBRE";
+                            db.SaveChanges();
+                        }
+                    }
+                }
+            }
+
+
+        }
         public void doIt(string id)
         {
             RedirectToAction("Test", "Account", new { id = id });

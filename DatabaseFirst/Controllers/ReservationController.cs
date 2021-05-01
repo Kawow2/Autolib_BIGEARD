@@ -23,7 +23,9 @@ namespace DatabaseFirst.Controllers
             //changer le statut du véhicule
 
             var db = new AutolibContext();
+            //var station = db.Stations.FirstOrDefault(s => s.IdStation.ToString() == idStation);
             var borne = db.Bornes.FirstOrDefault(b => b.IdBorne.ToString() == idBorne);
+            //checkReservation(idStation);
             var idVehicule = borne.IdVehicule;
             var vehicule = db.Vehicules.FirstOrDefault(v => v.IdVehicule == idVehicule);
             vehicule.Disponibilite = "Reserve";
@@ -33,7 +35,7 @@ namespace DatabaseFirst.Controllers
             {
                 Client = client.IdClient,
                 DateReservation = time,
-                DateEcheance = time.AddMinutes(60),
+                DateEcheance = time.AddMinutes(2),
                 Vehicule = (int)idVehicule
             };
 
@@ -70,6 +72,8 @@ namespace DatabaseFirst.Controllers
             return View(dt);
 
         }
+      
+       
 
 
     }
