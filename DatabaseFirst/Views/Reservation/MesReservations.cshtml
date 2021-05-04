@@ -26,7 +26,7 @@
                     <th>@col.ColumnName</th>
                 }
                 @*<th>Borné d'arrivée</th>*@
-                @*<th>Utiliser</th>*@
+                <th>Utiliser</th>
 
             </tr>
         </thead>
@@ -48,16 +48,16 @@
                         }
                     </select>
                 </td>*@
-                @*<td>
+                <td>
                     @if ((DateTime)row["Date echeance"] < DateTime.Now)
                     {
-                        <button onclick="utiliser(@row["Vehicule"],@row[""])" disabled>Utiliser</button>
+                        <button disabled>Utiliser</button>
                     }
                     else
                     {
-                        <button onclick="function() {@ViewBag.idVehicule = @row["Vehicule"] }" >Utiliser</button>
+                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
                     }
-                </td>*@
+                </td>
             </tr>
 
             }
@@ -96,11 +96,7 @@
 
 <script>
     function utiliser(v) {
-        var e = document.getElementById("sel1");
-        var value = e.value;       
-        var idStation = value.split(":")[0];
-        console.log(value);
-        console.log(location.href);  
+
         location.href = "/Reservation/Utiliser/" + v;
     }
 

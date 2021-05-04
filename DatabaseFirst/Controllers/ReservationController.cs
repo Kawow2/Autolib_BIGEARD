@@ -66,14 +66,52 @@ namespace DatabaseFirst.Controllers
                 dt.Rows.Add(row);
 
             }
-            var stations = db.Stations.ToList();
-            ViewBag.Stations = stations;
+            
 
             return View(dt);
 
         }
-      
-       
+
+        [Route("Reservation/{idBorneDepart}/{idVehicule}")]
+        public ActionResult ChoixBorneArrivee()
+        {
+            var db = new AutolibContext();
+            var stations = db.Stations.ToList();
+            ViewBag.Stations = stations;
+            //TODO afficher que les stations qui ont encore une place de libre 
+            return View();
+        }
+
+
+        [Route("Reservation/{idBorneDepart}/{idVehicule}/{idStationArrivee}")]
+        public void ChoixBorneArrivee(int idBorneDepart, int idVehicule, int idStationArrivee)
+        {
+            
+            var db = new AutolibContext();
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+            var borneArrive = db.Bornes.Where(b => b.Station == idStationArrivee && b.IdVehicule == null).FirstOrDefault();
+            var util = new Utilise()
+            {
+           
+                Client = Int32.Parse(idClient),
+                Vehicule = idVehicule,
+                BorneArrivee = borneArrive.IdBorne,
+                Date = DateTime.Today,
+                BorneDepart = idBorneDepart
+            };
+            var borneDepart = db.Bornes.FirstOrDefault(v => v.IdBorne == idBorneDepart && v.IdVehicule == idVehicule);
+            borneDepart.IdVehicule = null;
+            borneArrive.IdVehicule = idVehicule;
+            db.Utilises.Add(util);
+
+            db.SaveChanges();
+
+
+            
+        }
+
+
+
 
 
     }
