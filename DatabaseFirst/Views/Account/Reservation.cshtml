@@ -24,32 +24,44 @@
                 <th>
                     Réserver
                 </th>
+                <th>
+                    Utiliser
+                </th>
             </tr>
         </thead>
         <tbody>
             @foreach (DataRow row in Model.Rows)
             {
-                <tr>
-                    @foreach (DataColumn col in Model.Columns)
-                    {
-                        <td>@row[col.ColumnName]</td>
-                    }
+            <tr>
+                @foreach (DataColumn col in Model.Columns)
+                {
+                    <td>@row[col.ColumnName]</td>
+                }
+            <td>
+                @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de véhicule")
+                {
+                    <button disabled>Réserver</button>
+                }
+                else
+                {
+                    <button onclick="sendReservation(@row["NumBorne"])">Réserver</button>
+                }
+            </td>
                 <td>
                     @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de véhicule")
                     {
-                        <button onclick="sendReservation(@row["NumBorne"])" disabled>Réserver</button>
+                        <button  disabled>Utiliser</button>
                     }
                     else
                     {
-                        <button onclick="sendReservation(@row["NumBorne"])" >Réserver</button>
+                <button onclick="utiliser(@row["NumBorne"],@row["IdVehicule"])">Utiliser</button>
                     }
                 </td>
 
-                </tr>
+            </tr>
             }
         </tbody>
     </table>
-    @Html.Hidden("RedirectTo", Url.Action("Reservation", "Account"));
 
 
     
@@ -61,6 +73,11 @@
     function sendReservation(id) {
         @*var url = $("#RedirectTo").val();*@
         location.href = location.href + "/" + id;
+    }
+    function utiliser(idBorne,idVehicule) {
+
+        window.location.pathname = "/Reservation/" + idBorne + "/" + idVehicule;
+       
     }
 </script>
 
