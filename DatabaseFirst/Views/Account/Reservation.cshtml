@@ -4,6 +4,8 @@
 @{
     @model System.Data.DataTable
     @using System.Data;
+     var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+
 }
 
 
@@ -38,7 +40,7 @@
                     <td>@row[col.ColumnName]</td>
                 }
             <td>
-                @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de véhicule")
+                @if ( (((string)row["Disponibilite"] == "Reserve" ) ) || (string)row["Disponibilite"] == "Pas de véhicule")
                 {
                     <button disabled>Réserver</button>
                 }
@@ -48,7 +50,7 @@
                 }
             </td>
                 <td>
-                    @if ((string)row["Disponibilite"] == "Reserve" || (string)row["Disponibilite"] == "Pas de véhicule")
+                    @if ((string)row["Disponibilite"] == "Reserve" && ((string)row["IdClient"] != idClient) || (string)row["Disponibilite"] == "Pas de véhicule")
                     {
                         <button  disabled>Utiliser</button>
                     }

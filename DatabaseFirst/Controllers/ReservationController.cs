@@ -29,13 +29,14 @@ namespace DatabaseFirst.Controllers
             var idVehicule = borne.IdVehicule;
             var vehicule = db.Vehicules.FirstOrDefault(v => v.IdVehicule == idVehicule);
             vehicule.Disponibilite = "Reserve";
-            var client  = HttpContext.Session.GetObject<Client>("CurrentUser");
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+
             var time = DateTime.Now;
             var reservation = new Reservation()
             {
-                Client = client.IdClient,
+                Client = Int32.Parse(idClient),
                 DateReservation = time,
-                DateEcheance = time.AddMinutes(2),
+                DateEcheance = time.AddMinutes(90),
                 Vehicule = (int)idVehicule
             };
 
@@ -48,8 +49,9 @@ namespace DatabaseFirst.Controllers
         public ActionResult MesReservations()
         {
             var db = new AutolibContext();
-            var user = HttpContext.Session.GetObject<Client>("CurrentUser");
-            var reser = db.Reservations.Where(c => c.Client == user.IdClient).ToList();
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+
+            var reser = db.Reservations.Where(c => c.Client == Int32.Parse(idClient)).ToList();
 
             var dt = new DataTable();
             dt.Columns.Add("Vehicule", typeof(int));
@@ -63,6 +65,7 @@ namespace DatabaseFirst.Controllers
                 row["Vehicule"] = r.Vehicule;
                 row["Date de reservation"] = r.DateReservation;
                 row["Date echeance"] = r.DateEcheance;
+
                 dt.Rows.Add(row);
 
             }
