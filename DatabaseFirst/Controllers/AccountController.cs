@@ -14,8 +14,6 @@ namespace DatabaseFirst.Controllers
         // GET: AccountController
 
         //private int? IdStation;
-        private static DataTable datatable;
-
         public ActionResult Index()
         {
             var user = HttpContext.Session.GetObject<Client>("CurrentUser");
@@ -68,6 +66,7 @@ namespace DatabaseFirst.Controllers
         {
 
             var db = new AutolibContext();
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
             checkReservation(id);
             var bornes = db.Bornes.Where(x => x.Station == Int32.Parse(id)).ToList();
             var dt = new DataTable();
@@ -75,17 +74,30 @@ namespace DatabaseFirst.Controllers
             dt.Columns.Add("IdVehicule", typeof(int));
             dt.Columns.Add("EtatBatterie", typeof(int));
             dt.Columns.Add("Disponibilite", typeof(string));
+            dt.Columns.Add("IdClient", typeof(string));
 
             foreach (var b in bornes)
             {
+                var reser = db.Reservations.FirstOrDefault(r => r.Vehicule == b.IdVehicule && r.Client == Int32.Parse(idClient) && r.DateEcheance > DateTime.Now);
+
                 var row = dt.NewRow();
                 if (b.IdVehicule != null)
                 {
                     var v = db.Vehicules.FirstOrDefault(v => v.IdVehicule == b.IdVehicule);
+                    if (reser != null)
+                    {
+                        row["IdClient"] = idClient;
+                    }
+                    else
+                    {
+                        row["IdClient"] = 0;
+
+                    }
                     row["NumBorne"] = b.IdBorne;
                     row["IdVehicule"] = v.IdVehicule;
                     row["EtatBatterie"] = v.EtatBatterie ?? 0;
                     row["Disponibilite"] = v.Disponibilite ?? "";
+
                 }
                 else
                 {
@@ -93,6 +105,8 @@ namespace DatabaseFirst.Controllers
                     row["IdVehicule"] = 0;
                     row["EtatBatterie"] = 0;
                     row["Disponibilite"] = "Pas de véhicule";
+                    row["IdClient"] = 0;
+
 
                 }
                 dt.Rows.Add(row);
@@ -120,11 +134,15 @@ namespace DatabaseFirst.Controllers
                     if (vehicule.Disponibilite != "LIBRE")
                     {
                         var reser = db.Reservations.Where(r => r.Vehicule == vehicule.IdVehicule).OrderByDescending(v => v.DateEcheance).FirstOrDefault();
-                        if (reser.DateEcheance < DateTime.Now)
+                        if (reser != null)
                         {
-                            vehicule.Disponibilite = "LIBRE";
-                            db.SaveChanges();
+                            if (reser.DateEcheance < DateTime.Now)
+                            {
+                                vehicule.Disponibilite = "LIBRE";
+                                db.SaveChanges();
+                            }
                         }
+                       
                     }
                 }
             }
