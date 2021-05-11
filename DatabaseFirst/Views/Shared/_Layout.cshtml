@@ -50,7 +50,16 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Authentification" asp-action="Logout">Se déconnecter</a>
                             </li>
+                            @if (User.Claims.FirstOrDefault(c => c.Type == "Role").Value == "Admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Authentification" asp-action="Logout">Gestion des comptes utilisateurs</a>
+                                </li>
+                            }
                         }
+
+
+
                     </ul>
                 </div>
             </div>

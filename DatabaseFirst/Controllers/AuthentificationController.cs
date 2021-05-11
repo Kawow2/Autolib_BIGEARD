@@ -25,12 +25,22 @@ namespace DatabaseFirst.Controllers
             var user = db.Clients.FirstOrDefault(x => x.Nom == nom && x.Prenom == prenom);
             if (user != null)
             {//connection
+                               
                 var claims = new List<Claim>()
                 {
                     //new Claim(ClaimTypes.Name,user.Nom),
                     //new Claim("Prenom",user.Prenom),
                     new Claim("IdClient",user.IdClient.ToString()),
                 };
+
+                if (user.IdClient == 102)
+                {
+                    claims.Add(new Claim("Role", "Admin"));
+                }
+                else
+                {
+                    claims.Add(new Claim("Role", "Client"));
+                }
                 var identity = new ClaimsIdentity(claims, "Identity");
                 var userPrincipal = new ClaimsPrincipal(new[] { identity });
 
