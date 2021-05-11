@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/084564ee07.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -25,8 +26,7 @@
                 {
                     <th>@col.ColumnName</th>
                 }
-                @*<th>Borné d'arrivée</th>*@
-                <th>Utiliser</th>
+                @*<th>Supprimer</th>*@
 
             </tr>
         </thead>
@@ -39,25 +39,9 @@
                     <td>@row[col.ColumnName]</td>
                 }
 
+                @*<td><a onclick="deleteUtilisation(@row["Vehicule"], @row["Date"], @row[""])"><i class="fas fa-trash"></i></a></td>*@
 
-                @*<td>
-                    <select class="form-control" id="sel@i">
-                        @foreach (var s in ViewBag.Stations)
-                        {
-                            <option>@(s.IdStation + " : "+ s.Numero + " " + s.Adresse)</option>
-                        }
-                    </select>
-                </td>*@
-                <td>
-                    @if ((DateTime)row["Date echeance"] < DateTime.Now)
-                    {
-                        <button disabled>Utiliser</button>
-                    }
-                    else
-                    {
-                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
-                    }
-                </td>
+
             </tr>
 
             }

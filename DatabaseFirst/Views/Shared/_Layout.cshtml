@@ -21,9 +21,6 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
 
                         @if (!User.Identity.IsAuthenticated)
                         {
@@ -42,7 +39,7 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Map" asp-action="Index">Map</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="MesReservations">Mes réservation</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reservation" asp-action="MesCommandes">Mon historique d'utilisation</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Mon compte</a>
