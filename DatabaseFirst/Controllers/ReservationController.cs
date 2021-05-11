@@ -45,29 +45,36 @@ namespace DatabaseFirst.Controllers
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
-
-        public ActionResult MesReservations()
+        /// <summary>
+        /// Affichages des utilisations des véhicules 
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult MesCommandes()
         {
             var db = new AutolibContext();
             var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
 
-            var reser = db.Reservations.Where(c => c.Client == Int32.Parse(idClient)).ToList();
-
+            var util = db.Utilises.Where(c => c.Client == Int32.Parse(idClient)).ToList();
             var dt = new DataTable();
             dt.Columns.Add("Vehicule", typeof(int));
-            //dt.Columns.Add("CatVehicule", typeof(int));
-            dt.Columns.Add("Date de reservation", typeof(DateTime));
-            dt.Columns.Add("Date echeance", typeof(DateTime));
-            reser.OrderByDescending(r => r.DateEcheance);
-            foreach(var r in reser)
+            dt.Columns.Add("Date", typeof(DateTime));
+            dt.Columns.Add("Borne de départ", typeof(string));
+            dt.Columns.Add("Borne d'arrivée", typeof(string));
+
+            util.OrderByDescending(r => r.Date);
+            foreach(var r in util)
             {
+                var idStationDep = db.Bornes.FirstOrDefault(b => b.IdBorne == r.BorneDepart).Station;
+                var stationDepart = db.Stations.FirstOrDefault(s => s.IdStation == idStationDep);
+                var idStationFin = db.Bornes.FirstOrDefault(b => b.IdBorne == r.BorneArrivee).Station;
+                var stationFin = db.Stations.FirstOrDefault(s => s.IdStation == idStationFin);
+
                 var row = dt.NewRow();
                 row["Vehicule"] = r.Vehicule;
-                row["Date de reservation"] = r.DateReservation;
-                row["Date echeance"] = r.DateEcheance;
-
+                row["Date"] = r.Date;
+                row["Borne de départ"] = stationDepart.Numero + " " + stationDepart.Adresse;
+                row["Borne d'arrivée"] = stationFin.Numero + " " + stationFin.Adresse;
                 dt.Rows.Add(row);
-
             }
             
 

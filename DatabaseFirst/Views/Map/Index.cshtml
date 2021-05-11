@@ -14,7 +14,7 @@
 <div id='map' style='width: 1200px; height: 600px;'></div>
 <div class="map-overlay">
     <fieldset>
-        <input id="feature-filter" type="text" placeholder="Filter results by name">
+        <input id="feature-filter" type="text" disabled>
     </fieldset>
     <div id="feature-listing" class="listing"></div>
 </div>
@@ -55,24 +55,10 @@
         listingEl.innerHTML = '';
         if (features.length) {
             features.forEach(function (feature) {
-                // console.log(feature);
                 var prop = feature.properties;
                 var item = document.createElement('a');
-                // item.href = prop.wikipedia;
-                // item.target = '_blank';
                 item.textContent = prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')';
-                item.addEventListener('mouseover', function () {
-                    var prop = feature.properties;
-                    // Highlight corresponding feature on the map
-                    // console.log(feature.geometry.coordinates);
-                    popup
-                        .setLngLat(feature.geometry.coordinates)
-                        .setText(
-                            prop.localisation + ' (' + prop.commune + "-" + prop.code_insee + ')'
 
-                    ).setHTML(divElement.innerHTML)
-                    .addTo(map);
-                });
                 listingEl.appendChild(item);
             });
 
@@ -89,7 +75,6 @@
             filterEl.parentNode.style.display = 'none';
 
             // remove features filter
-            // map.setFilter('sta', ['has', 'abbrev']);
         }
     }
 
