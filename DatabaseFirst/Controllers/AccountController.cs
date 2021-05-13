@@ -13,25 +13,42 @@ namespace DatabaseFirst.Controllers
     {
         // GET: AccountController
 
-        //private int? IdStation;
         public ActionResult Index()
         {
             var user = HttpContext.Session.GetObject<Client>("CurrentUser");
             //var client = Controller.CurrentClient;
             return View(user);
         }
-        [HttpPost]
-        public void UpdateInformations(string nom, string prenom, DateTime naiss)
+        [Route("Account/{id}")]
+        public ActionResult Index(int id)
         {
+            var db = new AutolibContext();
+            var user = db.Clients.FirstOrDefault(c => c.IdClient == id);
+            //var client = Controller.CurrentClient;
+            return View(user);
+        }
+
+
+
+        [HttpPost]
+        public void UpdateInformations(string idC,string nom, string prenom, DateTime naiss)
+        {
+
+            //if id en param == id client 
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+            
             var user = HttpContext.Session.GetObject<Client>("CurrentUser");
             using (var db = new AutolibContext())
             {
-                var c = db.Clients.FirstOrDefault(u => u.IdClient == user.IdClient);
+                var c = db.Clients.FirstOrDefault(u => u.IdClient.ToString() == idC);
                 c.DateNaissance = naiss;
                 c.Nom = nom;
                 c.Prenom = prenom;
                 db.SaveChanges();
-                HttpContext.Session.SetObject("CurrentUser", c);
+                if (idClient == idC)
+                {
+                    HttpContext.Session.SetObject("CurrentUser", c);
+                }
 
             }
             //return View();
@@ -146,8 +163,30 @@ namespace DatabaseFirst.Controllers
                     }
                 }
             }
-
-
         }    
+
+        public ActionResult ManageAccount()
+        {
+            var db = new AutolibContext();
+            var dt = new DataTable();
+            dt.Columns.Add("Id", typeof(int));
+            dt.Columns.Add("Nom", typeof(string));
+            dt.Columns.Add("Prénom", typeof(string));
+            dt.Columns.Add("Date de naissance", typeof(DateTime));
+            foreach (var client in db.Clients.ToList())
+            {
+                if (client.IdClient != 102 )
+                {
+                    var row = dt.NewRow();
+                    row["Id"] = client.IdClient;
+                    row["Nom"] = client.Nom;
+                    row["Prénom"] = client.Prenom;
+                    row["Date de naissance"] = client.DateNaissance;
+                    dt.Rows.Add(row);
+                }
+            }
+
+            return View(dt);
+        }
     }
 }

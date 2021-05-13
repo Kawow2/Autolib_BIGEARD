@@ -5,21 +5,25 @@
 }
 @using (Html.BeginForm("UpdateInformations", "Account", FormMethod.Post))
 {
-    <form action="" method="get" class="form-example">
-        <div class="form-example">
-            <label for="name">Votre nom</label>
-            <input type="text" name="nom" id="nom" value=@Model.Nom required>
-        </div>
-        <div class="form-example">
-            <label for="prenom">Votre prenom : </label>
-            <input type="text" name="prenom" id="prenom" value=@Model.Prenom required>
-        </div>
-        <div>
-            <label for="date">Date de naissance : </label>
-            <input type="datetime-local" id="naiss" name="naiss" value="@Model.DateNaissance.ToString("s")" required>
-        </div>
-        <div class="form-example">
-            <input type="submit" value="Valider mes informations">
-        </div>
-    </form>
+<form action="" method="get" class="form-example">
+    <div>
+        <label for="id">ID </label>
+        <input type="text" id="idc" name="idc" value="@Model.IdClient" readonly >
+    </div>
+    <div class="form-example">
+        <label for="name">Votre nom</label>
+        <input type="text" name="nom" id="nom" value=@Model.Nom required>
+    </div>
+    <div class="form-example">
+        <label for="prenom">Votre prenom : </label>
+        <input type="text" name="prenom" id="prenom" value=@Model.Prenom required>
+    </div>
+    <div>
+        <label for="date">Date de naissance : </label>
+        <input type="datetime-local" id="naiss" name="naiss" value="@Model.DateNaissance.ToString("s")" required>
+    </div>
+    <div class="form-example">
+        <input type="submit" value="Valider mes informations">
+    </div>
+</form>
 }
