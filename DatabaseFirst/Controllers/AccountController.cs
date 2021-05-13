@@ -188,5 +188,15 @@ namespace DatabaseFirst.Controllers
 
             return View(dt);
         }
+
+        [Route("Account/Delete/{id}")]
+        public ActionResult DeleteAccount(int id)
+        {
+            var db = new AutolibContext();
+            var c = db.Clients.FirstOrDefault(c => c.IdClient == id);
+            db.Clients.Remove(c);
+            db.SaveChanges();
+            return RedirectToAction("ManageAccount", "Account");
+        }
     }
 }

@@ -42,7 +42,7 @@
 
                     </td>
                     <td>
-                        <a onclick="deleteAccount(@row["Id"])"> <i class="fas fa-trash"></i><button>Update</button></a >
+                        <a onclick="deleteAccount(@row["Id"])"> <i class="fas fa-trash"></i><button>Delete</button></a >
                     </td>
                 </tr>
 
@@ -56,7 +56,7 @@
 <script>
     function deleteAccount (id)
     {
-        //modal ? 
+        location.pathname = "Account/Delete/" + id; 
     }
 
     function update (id)
