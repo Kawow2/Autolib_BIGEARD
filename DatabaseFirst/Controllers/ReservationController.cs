@@ -86,18 +86,20 @@ namespace DatabaseFirst.Controllers
         public ActionResult ChoixBorneArrivee()
         {
             var db = new AutolibContext();
-            var stations = db.Stations.ToList();
+            var stations = db.Stations.Where(s => s.Bornes.Any(b => b.IdVehicule ==null)).ToList();
             ViewBag.Stations = stations;
             //TODO afficher que les stations qui ont encore une place de libre 
             return View();
         }
 
 
-        [Route("Reservation/{idBorneDepart}/{idVehicule}/{idStationArrivee}")]
-        public void ChoixBorneArrivee(int idBorneDepart, int idVehicule, int idStationArrivee)
+        [Route("Reservation/Utiliser/{idVehicule}/{idStationArrivee}")]
+        public ActionResult ChoixBorneArrivee(int idVehicule, int idStationArrivee)
         {
             
             var db = new AutolibContext();
+
+            var idBorneDepart = db.Bornes.Where(b => b.IdVehicule == idVehicule).FirstOrDefault().IdBorne;
             var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
             var borneArrive = db.Bornes.Where(b => b.Station == idStationArrivee && b.IdVehicule == null).FirstOrDefault();
             var util = new Utilise()
@@ -106,7 +108,7 @@ namespace DatabaseFirst.Controllers
                 Client = Int32.Parse(idClient),
                 Vehicule = idVehicule,
                 BorneArrivee = borneArrive.IdBorne,
-                Date = DateTime.Today,
+                Date = DateTime.Now,
                 BorneDepart = idBorneDepart
             };
             var borneDepart = db.Bornes.FirstOrDefault(v => v.IdBorne == idBorneDepart && v.IdVehicule == idVehicule);
@@ -114,9 +116,11 @@ namespace DatabaseFirst.Controllers
             borneArrive.IdVehicule = idVehicule;
             db.Utilises.Add(util);
 
+            var reser = db.Reservations.FirstOrDefault(r => r.Vehicule == idVehicule && r.Client == Int32.Parse(idClient));
+            db.Reservations.Remove(reser);
             db.SaveChanges();
 
-
+            return RedirectToAction("Index", "Home");
             
         }
 

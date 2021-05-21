@@ -38,10 +38,26 @@
                 {
                     <td>@row[col.ColumnName]</td>
                 }
-
-                @*<td><a onclick="deleteUtilisation(@row["Vehicule"], @row["Date"], @row[""])"><i class="fas fa-trash"></i></a></td>*@
-
-
+               
+                <td>
+                    @if ((DateTime)row["Date echeance"] < DateTime.Now)
+                    {
+                        <button disabled>Utiliser</button>
+                    }
+                    else
+                    {
+                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
+                    }
+                </td>
+                    @if ((DateTime)row["Date echeance"] < DateTime.Now)
+                    {
+                        <button disabled>Utiliser</button>
+                    }
+                    else
+                    {
+                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
+                    }
+                </td>
             </tr>
 
             }

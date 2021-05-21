@@ -26,9 +26,7 @@
                 <th>
                     Réserver
                 </th>
-                <th>
-                    Utiliser
-                </th>
+               
             </tr>
         </thead>
         <tbody>
@@ -49,17 +47,7 @@
                     <button onclick="sendReservation(@row["NumBorne"])">Réserver</button>
                 }
             </td>
-                <td>
-                    @if ((string)row["Disponibilite"] == "Reserve" && ((string)row["IdClient"] != idClient) || (string)row["Disponibilite"] == "Pas de véhicule")
-                    {
-                        <button  disabled>Utiliser</button>
-                    }
-                    else
-                    {
-                <button onclick="utiliser(@row["NumBorne"],@row["IdVehicule"])">Utiliser</button>
-                    }
-                </td>
-
+                
             </tr>
             }
         </tbody>
@@ -73,13 +61,8 @@
 <script>
 
     function sendReservation(id) {
-        @*var url = $("#RedirectTo").val();*@
         location.href = location.href + "/" + id;
     }
-    function utiliser(idBorne,idVehicule) {
-
-        window.location.pathname = "/Reservation/" + idBorne + "/" + idVehicule;
-       
-    }
+   
 </script>
 

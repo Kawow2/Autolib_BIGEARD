@@ -17,11 +17,8 @@
 <script>
 
     function reserver() {
-        console.log(location.href);
         var idBorne = document.getElementById("selec");
-        console.log(idBorne);
         var txt = idBorne.options[idBorne.selectedIndex].text;
-        @*console.log(splir);*@
         var id = txt.split(' ')[0];
         location.href = location.href + "/" + id
     }
