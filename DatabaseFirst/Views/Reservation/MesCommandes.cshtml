@@ -33,32 +33,33 @@
         <tbody>
             @foreach (DataRow row in Model.Rows)
             {
-            <tr>
-                @foreach (DataColumn col in Model.Columns)
-                {
-                    <td>@row[col.ColumnName]</td>
-                }
-               
-                <td>
+                <tr>
+                    @foreach (DataColumn col in Model.Columns)
+                    {
+                        <td>@row[col.ColumnName]</td>
+                    }
+
+                    @*<td>
+                        @if ((DateTime)row["Date echeance"] < DateTime.Now)
+                        {
+                            <button disabled>Utiliser</button>
+                        }
+                        else
+                        {
+                            <button onclick="utiliser(@row["Vehicule"])">Utiliser</button>
+                        }
+                    </td>
                     @if ((DateTime)row["Date echeance"] < DateTime.Now)
                     {
                         <button disabled>Utiliser</button>
                     }
                     else
                     {
-                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
-                    }
-                </td>
-                    @if ((DateTime)row["Date echeance"] < DateTime.Now)
-                    {
-                        <button disabled>Utiliser</button>
-                    }
-                    else
-                    {
-                        <button onclick="utiliser(@row["Vehicule"])" >Utiliser</button>
-                    }
-                </td>
-            </tr>
+                        <button onclick="utiliser(@row["Vehicule"])">Utiliser</button>
+                    }*@
+                    
+
+                </tr>
 
             }
         </tbody>
