@@ -45,6 +45,38 @@ namespace DatabaseFirst.Controllers
             db.SaveChanges();
             return RedirectToAction("Index", "Home");
         }
+
+
+        public ActionResult MesReservations()
+        {
+            var db = new AutolibContext();
+            var idClient = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+
+            var reser = db.Reservations.Where(c => c.Client == Int32.Parse(idClient)).ToList();
+
+            var dt = new DataTable();
+            dt.Columns.Add("Vehicule", typeof(int));
+            //dt.Columns.Add("CatVehicule", typeof(int));
+            dt.Columns.Add("Date de reservation", typeof(DateTime));
+            dt.Columns.Add("Date echeance", typeof(DateTime));
+            reser.OrderByDescending(r => r.DateEcheance);
+            foreach (var r in reser)
+            {
+                var row = dt.NewRow();
+                row["Vehicule"] = r.Vehicule;
+                row["Date de reservation"] = r.DateReservation;
+                row["Date echeance"] = r.DateEcheance;
+
+                dt.Rows.Add(row);
+
+            }
+
+
+            return View(dt);
+
+        }
+
+
         /// <summary>
         /// Affichages des utilisations des véhicules 
         /// </summary>
