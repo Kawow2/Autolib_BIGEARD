@@ -12,12 +12,20 @@ namespace DatabaseFirst.Controllers
 {
     public class AuthentificationController : Controller
     {
-    
+        /// <summary>
+        /// retroune la vue 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Index()
         {
             return View();
         }
-
+        /// <summary>
+        /// envoi du formulaire de log in 
+        /// </summary>
+        /// <param name="nom"></param>
+        /// <param name="prenom"></param>
+        /// <returns></returns>
         [HttpPost]
         public  ActionResult Login(string nom, string prenom)
         {
@@ -52,7 +60,7 @@ namespace DatabaseFirst.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-        
+        //déconnexion
         public ActionResult Logout()
         {
             HttpContext.SignOutAsync();

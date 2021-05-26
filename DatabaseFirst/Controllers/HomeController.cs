@@ -24,19 +24,9 @@ namespace DatabaseFirst.Controllers
             return View();
         }
 
-        [Authorize]
-        public IActionResult Vehicules()
-        {
-            return View();
-        }
+       
 
-        public IActionResult Privacy()
-        {
-            var db = new AutolibContext();
-            var c = db.Clients.FirstOrDefault(x => x.Prenom == "SOLANGE");
-            return View();
-        }
-
+       
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

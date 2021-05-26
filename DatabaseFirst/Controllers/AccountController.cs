@@ -13,25 +13,45 @@ namespace DatabaseFirst.Controllers
     {
         // GET: AccountController
 
+       /// <summary>
+       /// modification de son compte, accessible pour tous les clients
+       /// </summary>
+       /// <returns></returns>
+        [Route("Account")]
         public ActionResult Index()
         {
-            var user = HttpContext.Session.GetObject<Client>("CurrentUser");
+            var db = new AutolibContext();
+            var id = User.Claims.FirstOrDefault(c => c.Type == "IdClient").Value;
+            var user = db.Clients.FirstOrDefault(c => c.IdClient.ToString() == id);
             //var client = Controller.CurrentClient;
             return View(user);
         }
+        /// <summary>
+        /// modification du compte par l'admin
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("Account/{id}")]
         public ActionResult Index(int id)
         {
             var db = new AutolibContext();
+           
             var user = db.Clients.FirstOrDefault(c => c.IdClient == id);
             //var client = Controller.CurrentClient;
             return View(user);
         }
 
 
-
+        /// <summary>
+        /// mise à jour des informations 
+        /// </summary>
+        /// <param name="idC"></param>
+        /// <param name="nom"></param>
+        /// <param name="prenom"></param>
+        /// <param name="naiss"></param>
+        /// <returns></returns>
         [HttpPost]
-        public void UpdateInformations(string idC,string nom, string prenom, DateTime naiss)
+        public ActionResult UpdateInformations(string idC,string nom, string prenom, DateTime naiss)
         {
 
             //if id en param == id client 
@@ -51,14 +71,25 @@ namespace DatabaseFirst.Controllers
                 }
 
             }
-            //return View();
+            return RedirectToAction("Index", "Home");
         }
 
-
+        /// <summary>
+        /// retourne la vue 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult Register()
         {
             return View();
         }
+
+        /// <summary>
+        /// envoi du formulaire de création de compte + création dans la base
+        /// </summary>
+        /// <param name="nom"></param>
+        /// <param name="prenom"></param>
+        /// <param name="naiss"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult CreateAccount(string nom, string prenom, DateTime naiss)
         {
@@ -77,7 +108,11 @@ namespace DatabaseFirst.Controllers
             return RedirectToAction("Index","Home");
         }
 
-
+        /// <summary>
+        /// affichages des véhicules disponible pour la station choisis 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("Account/Reservation/{id}")]
         public ActionResult Reservation(string id)
         {
@@ -175,7 +210,7 @@ namespace DatabaseFirst.Controllers
             dt.Columns.Add("Date de naissance", typeof(DateTime));
             foreach (var client in db.Clients.ToList())
             {
-                if (client.IdClient != 102 )
+                if (client.IdClient != 1 )
                 {
                     var row = dt.NewRow();
                     row["Id"] = client.IdClient;
@@ -188,7 +223,11 @@ namespace DatabaseFirst.Controllers
 
             return View(dt);
         }
-
+        /// <summary>
+        /// suppression d'un compte par l'admin 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [Route("Account/Delete/{id}")]
         public ActionResult DeleteAccount(int id)
         {

@@ -14,7 +14,12 @@ namespace DatabaseFirst.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// ajoute une réservation au client
+        /// </summary>
+        /// <param name="idStation"></param>
+        /// <param name="idBorne"></param>
+        /// <returns></returns>
         [Route("Account/Reservation/{idStation}/{idBorne}")]
         public IActionResult Reserver(string idStation, string idBorne)
         {
@@ -47,6 +52,10 @@ namespace DatabaseFirst.Controllers
         }
 
 
+        /// <summary>
+        /// affiche les réservations du client 
+        /// </summary>
+        /// <returns></returns>
         public ActionResult MesReservations()
         {
             var db = new AutolibContext();
@@ -113,7 +122,10 @@ namespace DatabaseFirst.Controllers
             return View(dt);
 
         }
-
+        /// <summary>
+        /// retorune la vue du choix de la borne d'arrivée
+        /// </summary>
+        /// <returns></returns>
         [Route("Reservation/{idBorneDepart}/{idVehicule}")]
         public ActionResult ChoixBorneArrivee()
         {
@@ -124,7 +136,12 @@ namespace DatabaseFirst.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// choix de la borne d'arrivée
+        /// </summary>
+        /// <param name="idVehicule"></param>
+        /// <param name="idStationArrivee"></param>
+        /// <returns></returns>
         [Route("Reservation/Utiliser/{idVehicule}/{idStationArrivee}")]
         public ActionResult ChoixBorneArrivee(int idVehicule, int idStationArrivee)
         {

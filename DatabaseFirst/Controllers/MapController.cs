@@ -11,6 +11,10 @@ namespace DatabaseFirst.Controllers
 {
     public class MapController : Controller
     {
+        /// <summary>
+        /// généère la carte à partie de la base et l'affiche 
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Index()
         {
             //creation de la map à partir 
@@ -19,8 +23,11 @@ namespace DatabaseFirst.Controllers
             return View();
         }
 
-        //[HttpGet]
-        
+ 
+        /// <summary>
+        ///génération de la carte
+        /// 
+        /// </summary>
         public void GenerateMap()
         {
 
@@ -77,27 +84,9 @@ namespace DatabaseFirst.Controllers
 
         }
 
-        public ActionResult AddStation()
-        {
-            return View();
-        }
 
-        public ActionResult CreateStation(string num, string adresse, decimal lat, decimal longitude, string postal,string ville)
-        {
-            var db = new AutolibContext();
-            var st = new Station()
-            {
-                Adresse = adresse,
-                CodePostal = Int32.Parse(postal),
-                Latitude = (lat),
-                Longitude = (longitude),
-                Numero = Int32.Parse(num),
-                Ville = ville
-            };
-            db.Stations.Add(st);
-            db.SaveChanges();
-            return RedirectToAction("AddStation", "Map");
-        }
+
+      
 
 
 
